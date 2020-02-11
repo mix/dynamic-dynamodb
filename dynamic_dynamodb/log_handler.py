@@ -23,7 +23,7 @@ import sys
 
 from logutils import dictconfig
 
-import config_handler
+from . import config_handler
 
 LOG_CONFIG = {
     'version': 1,
@@ -98,7 +98,7 @@ else:
     try:
         dictconfig.dictConfig(LOG_CONFIG)
     except ValueError as error:
-        print('Error configuring logger: {0}'.format(error))
+        print(('Error configuring logger: {0}'.format(error)))
         sys.exit(1)
     except:
         raise

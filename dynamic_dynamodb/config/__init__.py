@@ -213,7 +213,7 @@ def __get_cmd_table_options(cmd_line_options):
     table_name = cmd_line_options['table_name']
     options = {table_name: {}}
 
-    for option in DEFAULT_OPTIONS['table'].keys():
+    for option in list(DEFAULT_OPTIONS['table'].keys()):
         options[table_name][option] = DEFAULT_OPTIONS['table'][option]
 
         if option in cmd_line_options:
@@ -238,7 +238,7 @@ def __get_config_table_options(conf_file_options):
         options[table_name] = {}
 
         # Regular table options
-        for option in DEFAULT_OPTIONS['table'].keys():
+        for option in list(DEFAULT_OPTIONS['table'].keys()):
             options[table_name][option] = DEFAULT_OPTIONS['table'][option]
 
             if option not in conf_file_options['tables'][table_name]:
@@ -250,10 +250,10 @@ def __get_config_table_options(conf_file_options):
                     options[table_name][option] = \
                         [i.strip() for i in raw_list.split(',')]
                 except:
-                    print(
+                    print((
                         'Error parsing the "sns-message-types" '
                         'option: {0}'.format(
-                            conf_file_options['tables'][table_name][option]))
+                            conf_file_options['tables'][table_name][option])))
             else:
                 options[table_name][option] = \
                     conf_file_options['tables'][table_name][option]
@@ -261,7 +261,7 @@ def __get_config_table_options(conf_file_options):
         # GSI specific options
         if 'gsis' in conf_file_options['tables'][table_name]:
             for gsi_name in conf_file_options['tables'][table_name]['gsis']:
-                for option in DEFAULT_OPTIONS['gsi'].keys():
+                for option in list(DEFAULT_OPTIONS['gsi'].keys()):
                     opt = DEFAULT_OPTIONS['gsi'][option]
 
                     if 'gsis' not in options[table_name]:
@@ -281,12 +281,12 @@ def __get_config_table_options(conf_file_options):
                                 'tables'][table_name]['gsis'][gsi_name][option]
                             opt = [i.strip() for i in raw_list.split(',')]
                         except:
-                            print(
+                            print((
                                 'Error parsing the "sns-message-types" '
                                 'option: {0}'.format(
                                     conf_file_options[
                                         'tables'][table_name][
-                                            'gsis'][gsi_name][option]))
+                                            'gsis'][gsi_name][option])))
                     else:
                         opt = conf_file_options[
                             'tables'][table_name]['gsis'][gsi_name][option]
@@ -307,7 +307,7 @@ def __get_global_options(cmd_line_options, conf_file_options=None):
     """
     options = {}
 
-    for option in DEFAULT_OPTIONS['global'].keys():
+    for option in list(DEFAULT_OPTIONS['global'].keys()):
         options[option] = DEFAULT_OPTIONS['global'][option]
 
         if conf_file_options and option in conf_file_options:
@@ -330,7 +330,7 @@ def __get_logging_options(cmd_line_options, conf_file_options=None):
     """
     options = {}
 
-    for option in DEFAULT_OPTIONS['logging'].keys():
+    for option in list(DEFAULT_OPTIONS['logging'].keys()):
         options[option] = DEFAULT_OPTIONS['logging'][option]
 
         if conf_file_options and option in conf_file_options:
@@ -434,8 +434,8 @@ def __check_gsi_rules(configuration):
             if gsi['sns_message_types']:
                 for sns_type in gsi['sns_message_types']:
                     if sns_type not in valid_sns_message_types:
-                        print('Warning: Invalid sns-message-type: {0}'.format(
-                            sns_type))
+                        print(('Warning: Invalid sns-message-type: {0}'.format(
+                            sns_type)))
                         gsi['sns_message_types'].remove(sns_type)
 
             # Ensure values > 1 for some important configuration options
@@ -471,34 +471,34 @@ def __check_gsi_rules(configuration):
                         and option in gsi
                         and gsi[option]
                         and gsi[option] < 1):
-                    print('{0} may not be lower than 1 for GSI {1}'.format(
-                        option, gsi_name))
+                    print(('{0} may not be lower than 1 for GSI {1}'.format(
+                        option, gsi_name)))
                     sys.exit(1)
 
                 if (option in gsi
                         and option not in non_default
                         and gsi[option] < 1):
-                    print('{0} may not be lower than 1 for GSI {1}'.format(
-                        option, gsi_name))
+                    print(('{0} may not be lower than 1 for GSI {1}'.format(
+                        option, gsi_name)))
                     sys.exit(1)
 
             if (int(gsi['min_provisioned_reads']) >
                     int(gsi['max_provisioned_reads'])):
-                print(
+                print((
                     'min-provisioned-reads ({0}) may not be higher than '
                     'max-provisioned-reads ({1}) for GSI {2}'.format(
                         gsi['min_provisioned_reads'],
                         gsi['max_provisioned_reads'],
-                        gsi_name))
+                        gsi_name)))
                 sys.exit(1)
             elif (int(gsi['min_provisioned_writes']) >
                     int(gsi['max_provisioned_writes'])):
-                print(
+                print((
                     'min-provisioned-writes ({0}) may not be higher than '
                     'max-provisioned-writes ({1}) for GSI {2}'.format(
                         gsi['min_provisioned_writes'],
                         gsi['max_provisioned_writes'],
-                        gsi_name))
+                        gsi_name)))
                 sys.exit(1)
 
 
@@ -511,8 +511,8 @@ def __check_logging_rules(configuration):
         'error'
     ]
     if configuration['logging']['log_level'].lower() not in valid_log_levels:
-        print('Log level must be one of {0}'.format(
-            ', '.join(valid_log_levels)))
+        print(('Log level must be one of {0}'.format(
+            ', '.join(valid_log_levels))))
         sys.exit(1)
 
 
@@ -600,8 +600,8 @@ def __check_table_rules(configuration):
         if table['sns_message_types']:
             for sns_type in table['sns_message_types']:
                 if sns_type not in valid_sns_message_types:
-                    print('Warning: Invalid sns-message-type: {0}'.format(
-                        sns_type))
+                    print(('Warning: Invalid sns-message-type: {0}'.format(
+                        sns_type)))
                     table['sns_message_types'].remove(sns_type)
 
         # Ensure values > 0 for some important configuration options
@@ -634,32 +634,32 @@ def __check_table_rules(configuration):
             if (option in non_default
                     and option in table
                     and table[option] and table[option] < 1):
-                print('{0} may not be lower than 1 for table {1}'.format(
-                    option, table_name))
+                print(('{0} may not be lower than 1 for table {1}'.format(
+                    option, table_name)))
                 sys.exit(1)
 
             if (option in table
                     and option not in non_default
                     and table[option] < 1):
-                print('{0} may not be lower than 1 for table {1}'.format(
-                    option, table_name))
+                print(('{0} may not be lower than 1 for table {1}'.format(
+                    option, table_name)))
                 sys.exit(1)
 
         if (int(table['min_provisioned_reads']) >
                 int(table['max_provisioned_reads'])):
-            print(
+            print((
                 'min_provisioned_reads ({0}) may not be higher than '
                 'max_provisioned_reads ({1}) for table {2}'.format(
                     table['min_provisioned_reads'],
                     table['max_provisioned_reads'],
-                    table_name))
+                    table_name)))
             sys.exit(1)
         elif (int(table['min_provisioned_writes']) >
                 int(table['max_provisioned_writes'])):
-            print(
+            print((
                 'min_provisioned_writes ({0}) may not be higher than '
                 'max_provisioned_writes ({1}) for table {2}'.format(
                     table['min_provisioned_writes'],
                     table['max_provisioned_writes'],
-                    table_name))
+                    table_name)))
             sys.exit(1)

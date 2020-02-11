@@ -2,7 +2,7 @@
 """ Command line configuration parser """
 import sys
 import os.path
-import ConfigParser
+import configparser
 import re
 import ast
 from copy import deepcopy
@@ -418,24 +418,24 @@ def __parse_options(config_file, section, options):
                     configuration[option.get('key')] = \
                         config_file.getint(section, option.get('option'))
                 except ValueError:
-                    print('Error: Expected an integer value for {0}'.format(
-                        option.get('option')))
+                    print(('Error: Expected an integer value for {0}'.format(
+                        option.get('option'))))
                     sys.exit(1)
             elif option.get('type') == 'float':
                 try:
                     configuration[option.get('key')] = \
                         config_file.getfloat(section, option.get('option'))
                 except ValueError:
-                    print('Error: Expected an float value for {0}'.format(
-                        option.get('option')))
+                    print(('Error: Expected an float value for {0}'.format(
+                        option.get('option'))))
                     sys.exit(1)
             elif option.get('type') == 'bool':
                 try:
                     configuration[option.get('key')] = \
                         config_file.getboolean(section, option.get('option'))
                 except ValueError:
-                    print('Error: Expected an boolean value for {0}'.format(
-                        option.get('option')))
+                    print(('Error: Expected an boolean value for {0}'.format(
+                        option.get('option'))))
                     sys.exit(1)
             elif option.get('type') == 'dict':
                 configuration[option.get('key')] = \
@@ -444,10 +444,10 @@ def __parse_options(config_file, section, options):
             else:
                 configuration[option.get('key')] = \
                     config_file.get(section, option.get('option'))
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             if option.get('required'):
-                print('Missing [{0}] option "{1}" in configuration'.format(
-                    section, option.get('option')))
+                print(('Missing [{0}] option "{1}" in configuration'.format(
+                    section, option.get('option'))))
                 sys.exit(1)
 
     return configuration
@@ -462,7 +462,7 @@ def parse(config_path):
     config_path = os.path.expanduser(config_path)
 
     # Read the configuration file
-    config_file = ConfigParser.RawConfigParser()
+    config_file = configparser.RawConfigParser()
     config_file.SECTCRE = re.compile(r"\[ *(?P<header>.*) *\]")
     config_file.optionxform = lambda option: option
     config_file.read(config_path)
@@ -569,12 +569,12 @@ def parse(config_path):
         found_table = True
         current_table_name = current_section.rsplit(':', 1)[1].strip()
         table_config['tables'][current_table_name] = \
-            dict(default_options.items() + __parse_options(
-                config_file, current_section, TABLE_CONFIG_OPTIONS).items())
+            dict(list(default_options.items()) + list(__parse_options(
+                config_file, current_section, TABLE_CONFIG_OPTIONS).items()))
 
     if not found_table:
-        print('Could not find a [table: <table_name>] section in {0}'.format(
-            config_path))
+        print(('Could not find a [table: <table_name>] section in {0}'.format(
+            config_path)))
         sys.exit(1)
 
     # Find gsi definitions - this allows gsi's to be defined before the table
@@ -589,18 +589,18 @@ def parse(config_path):
             continue
 
         if table_key not in table_config['tables']:
-            print('No table configuration matching {0} found.'.format(
-                table_key))
+            print(('No table configuration matching {0} found.'.format(
+                table_key)))
             sys.exit(1)
 
         if 'gsis' not in table_config['tables'][table_key]:
             table_config['tables'][table_key]['gsis'] = {}
 
         table_config['tables'][table_key]['gsis'][gsi_key] = \
-            ordereddict(default_options.items() + __parse_options(
-                config_file, current_section, TABLE_CONFIG_OPTIONS).items())
+            ordereddict(list(default_options.items()) + list(__parse_options(
+                config_file, current_section, TABLE_CONFIG_OPTIONS).items()))
 
     return ordereddict(
-        global_config.items() +
-        logging_config.items() +
-        table_config.items())
+        list(global_config.items()) +
+        list(logging_config.items()) +
+        list(table_config.items()))

@@ -13,7 +13,7 @@
 # serve to show the default.
 
 import os
-from ConfigParser import SafeConfigParser
+from configparser import SafeConfigParser
 
 settings = SafeConfigParser()
 settings.read(os.path.realpath('../dynamic_dynamodb/dynamic-dynamodb.conf'))
@@ -46,8 +46,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Dynamic DynamoDB'
-copyright = u'2013, Sebastian Dahlgren'
+project = 'Dynamic DynamoDB'
+copyright = '2013, Sebastian Dahlgren'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -199,8 +199,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index', 'DynamicDynamoDB.tex', u'Dynamic DynamoDB Documentation',
-   u'Sebastian Dahlgren', 'manual'),
+  ('index', 'DynamicDynamoDB.tex', 'Dynamic DynamoDB Documentation',
+   'Sebastian Dahlgren', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -229,8 +229,8 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'dynamicdynamodb', u'Dynamic DynamoDB Documentation',
-     [u'Sebastian Dahlgren'], 1)
+    ('index', 'dynamicdynamodb', 'Dynamic DynamoDB Documentation',
+     ['Sebastian Dahlgren'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -243,8 +243,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'DynamicDynamoDB', u'Dynamic DynamoDB Documentation',
-   u'Sebastian Dahlgren', 'DynamicDynamoDB', 'One line description of project.',
+  ('index', 'DynamicDynamoDB', 'Dynamic DynamoDB Documentation',
+   'Sebastian Dahlgren', 'DynamicDynamoDB', 'One line description of project.',
    'Miscellaneous'),
 ]
 
